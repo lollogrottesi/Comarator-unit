@@ -35,6 +35,7 @@ entity Signed_comparator_unit is
     Generic (N: integer:= 32);
     Port (A: in std_logic_vector (N-1 downto 0);
           B: in std_logic_vector (N-1 downto 0);
+          sign_unsign: in std_logic;--1-> signed comparator, 0-> unsigned.
           A_eq_B: out std_logic;
           A_not_equal_B: out std_logic;
           A_gr_B: out std_logic;
@@ -60,7 +61,8 @@ signal nor_network: std_logic_vector(N-3 downto 0);
 signal tmp_a_eq_b: std_logic;
 signal sign_a_b: std_logic_vector(1 downto 0);
 begin
-sign_a_b <= A(N-1)&B(N-1);
+sign_a_b <= A(N-1)&B(N-1) when sign_unsign = '1' else
+            "00";
 b_compl <= not B;
 A_xor_B <= A xor B;
 nor_network(0) <= A_xor_B (0) or A_xor_B(1);
